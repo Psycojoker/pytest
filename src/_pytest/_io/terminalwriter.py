@@ -141,11 +141,14 @@ class TerminalWriter:
 
     def write(self, msg: str, *, flush: bool = False, **markup: bool) -> None:
         if msg:
-            current_line = msg.rsplit("\n", 1)[-1]
-            if "\n" in msg:
-                self._current_line = current_line
+            if isinstance(msg, tuple):
+                _, current_line, msg = msg
             else:
-                self._current_line += current_line
+                current_line = msg.rsplit("\n", 1)[-1]
+                if "\n" in msg:
+                    self._current_line = current_line
+                else:
+                    self._current_line += current_line
 
             msg = self.markup(msg, **markup)
 
